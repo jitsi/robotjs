@@ -8,7 +8,7 @@
     "test": "run-script-os",
     "test:darwin:linux": "jasmine 'test/**/*.js'",
     "test:win32": "jasmine test/**/*.js",
-    "install": "prebuild-install || node-gyp rebuild",
+    "install": "node-gyp rebuild",
     "prebuild": "prebuild --all"
   },
   "repository": {
@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "jasmine": "^2.99.0",
-    "prebuild": "^9.1.1",
     "run-script-os": "^1.0.3",
     "targetpractice": "0.0.7"
   }
