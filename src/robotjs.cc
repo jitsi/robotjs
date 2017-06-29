@@ -60,8 +60,8 @@ NAN_METHOD(dragMouse)
 		return Nan::ThrowError("Invalid number of arguments.");
 	}
 
-	const int32_t x = Nan::To<int32_t>(info[0]).FromJust();
-	const int32_t y = Nan::To<int32_t>(info[1]).FromJust();
+	const int32_t x = info[0]->Int32Value();
+	const int32_t y = info[1]->Int32Value();
 	MMMouseButton button = LEFT_BUTTON;
 
 	if (info.Length() == 3)
@@ -101,9 +101,8 @@ NAN_METHOD(moveMouse)
 	{
 		return Nan::ThrowError("Invalid number of arguments.");
 	}
-
-	int32_t x = Nan::To<int32_t>(info[0]).FromJust();
-	int32_t y = Nan::To<int32_t>(info[1]).FromJust();
+	int32_t x = info[0]->Int32Value();
+	int32_t y = info[1]->Int32Value();
 
 	MMSignedPoint point;
 	point = MMSignedPointMake(x, y);
