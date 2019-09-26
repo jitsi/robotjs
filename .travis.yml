@@ -5,16 +5,13 @@ os:
   - linux
   - osx
 
-cache:
-  directories:
-    - node_modules
-
-git:
-  depth: 5
-
 env:
   matrix:
-  - TRAVIS_NODE_VERSION="8"
+  - TRAVIS_NODE_VERSION="0.10"
+  - TRAVIS_NODE_VERSION="0.12"
+  - TRAVIS_NODE_VERSION="4"
+  - TRAVIS_NODE_VERSION="5"
+  - TRAVIS_NODE_VERSION="6"
   - TRAVIS_NODE_VERSION="stable"
 
 addons:
@@ -53,9 +50,6 @@ install:
 
 script:
   - npm test
-
-after_success:
-  - if [[ $TRAVIS_TAG != "" ]]; then npm run prebuild -- -u $GITHUB_TOKEN; fi
 
 notifications:
   webhooks:

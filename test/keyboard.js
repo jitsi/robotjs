@@ -1,41 +1,59 @@
+var test = require('tape');
 var robot = require('..');
 var os = require('os');
 
-// TODO: Need tests for keyToggle, typeString, typeStringDelayed, and setKeyboardDelay.
+//TODO: Need tests for keyToggle, typeString, typeStringDelayed, and setKeyboardDelay.
 
-describe('Keyboard', () => {
-  it('Tap a key.', function() {
-    expect(() => robot.keyTap('a')).not.toThrow();
-    expect(() => robot.keyTap('a', 'control')).not.toThrow();
-    expect(() => robot.keyTap()).toThrowError(/Invalid number/);
-  });
+test('Tap a key.', function(t)
+{
+	t.plan(4);
+	t.ok(robot.keyTap("a") === 1, 'successfully tapped "a".');
+	t.ok(robot.keyTap("a", "control") === 1, 'successfully tapped "ctrl+a".');
 
-  // This it won't fail if there's an issue, but it will help you identify an issue if ran locally.
-  it('Tap all keys.', function()
-  {
-    var chars = 'abcdefghijklmnopqrstuvwxyz1234567890,./;\'[]\\'.split('');
+	t.throws(function()
+	{
+		robot.keyTap();
+	}, /Invalid number/, 'tap nothing.');
 
-    for (var x in chars)
-    {
-      expect(() => robot.keyTap(chars[x])).not.toThrow();
-    }
-  });
+	t.throws(function()
+	{
+		robot.keyTap();
+	}, /Invalid number/, 'tap "ctrl+a" with an extra argument.');
+});
 
-  // This it won't fail if there's an issue, but it will help you identify an issue if ran locally.
-  it('Tap all numpad keys.', function()
-  {
-    var nums = '0123456789'.split('');
+// This test won't fail if there's an issue, but it will help you identify an issue if ran locally.
+test('Tap all keys.', function(t)
+{
+	var chars = 'abcdefghijklmnopqrstuvwxyz1234567890,./;\'[]\\'.split('');
 
-    for (var x in nums)
-    {
-      if (os.platform() === 'linux')
-      {
-        expect(() => robot.keyTap('numpad_' + nums[x])).toThrowError(/Invalid key code/);
-      }
-      else
-      {
-        expect(() => robot.keyTap('numpad_' + nums[x])).not.toThrow();
-      }
-    }
-  });
+	for (var x in chars)
+	{
+		t.ok(robot.keyTap(chars[x]), 'tap ' + chars[x] + '.');
+	}
+
+	t.end();
+});
+
+// This test won't fail if there's an issue, but it will help you identify an issue if ran locally.
+test('Tap all numpad keys.', function(t)
+{
+	var nums = '0123456789'.split('');
+
+	for (var x in nums)
+	{
+		if (os.platform() === 'linux')
+		{
+			/* jshint loopfunc:true */
+			t.throws(function()
+			{
+				robot.keyTap('numpad_' + nums[x]);
+			}, /Invalid key code/, 'tap ' + 'numpad_' + nums[x] + ' threw an error.');
+		}
+		else
+		{
+			t.ok(robot.keyTap('numpad_' + nums[x]), 'tap ' + 'numpad_' + nums[x] + '.');
+		}
+	}
+
+	t.end();
 });

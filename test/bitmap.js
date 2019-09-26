@@ -1,56 +1,91 @@
+var test = require('tape');
 var robot = require('..');
 
-describe('Bitmap', () => {
-  var params = {
-		'width': 'number',
-		'height': 'number',
-		'byteWidth': 'number',
-		'bitsPerPixel': 'number',
-		'bytesPerPixel': 'number',
-		'image': 'object'
-	};
+var params =
+{
+	'width': 'number',
+	'height': 'number',
+	'byteWidth': 'number',
+	'bitsPerPixel': 'number',
+	'bytesPerPixel': 'number',
+	'image': 'object'
+};
 
-	it('Get a bitmap and check the parameters.', function() {
-		var img = robot.screen.capture();
+test('Get a bitmap.', function(t)
+{
+	t.plan(1);
+	t.ok(robot.screen.capture(), 'got a bitmap.');
+});
 
-		for (var x in params)
-		{
-			expect(typeof img[x]).toEqual(params[x]);
-		}
-	});
+test('Get a bitmap and check the parameters.', function(t)
+{
+	t.plan(6);
+	var img = robot.screen.capture();
 
-	it('Get a bitmap of a specific size.', function()
+	for (var x in params)
 	{
-		var size = 10;
-		var img = robot.screen.capture(0, 0, size, size);
+		t.equal(typeof img[x], params[x], 'make sure ' + x  + ' is a ' + params[x] + '.');
+	}
+});
 
-		// Support for higher density screens.
-		var multi = img.width / size;
-		var size = size * multi;
-		expect(img.height).toEqual(size);
-		expect(img.width).toEqual(size);
-	});
+test('Get a bitmap of a specific size.', function(t)
+{
+	var size = 10;
+	t.plan(2);
+	var img = robot.screen.capture(0, 0, size, size);
+	
+	// Support for higher density screens.
+	var multi = img.width / size;
+	var size = size * multi;
+	t.equals(img.height, size, 'make sure image is expected height.');
+	t.equals(img.width, size, 'make sure image is expected width.');
+});
 
-	it('Get a bitmap and make sure the colorAt works as expected.', function()
+test('Get a bitmap and make sure the colorAt works as expected.', function(t)
+{
+	t.plan(7);
+	var img = robot.screen.capture();
+	var hex = img.colorAt(0, 0);
+
+	t.ok(/^[0-9A-F]{6}$/i.test(hex), "colorAt returned valid hex.");
+
+	var screenSize = robot.getScreenSize();
+	var width = screenSize.width;
+	var height = screenSize.height;
+	
+	// Support for higher density screens.
+	var multi = img.width / width;
+	width = width * multi; 
+	height = height * multi;
+	
+	t.throws(function()
 	{
-		var img = robot.screen.capture();
-		var hex = img.colorAt(0, 0);
+		img.colorAt(0, height);
+	}, /are outside the bitmap/, 'colorAt (0, screen.height) threw an error.');
 
-		// t.ok(.it(hex), "colorAt returned valid hex.");
-		expect(hex).toMatch(/^[0-9A-F]{6}$/i);
+	t.doesNotThrow(function()
+	{
+		img.colorAt(0, height-1);
+	}, /are outside the bitmap/, 'colorAt (0, screen.height-1) did not throw an error.');
 
-		var screenSize = robot.getScreenSize();
-		var width = screenSize.width;
-		var height = screenSize.height;
+	t.throws(function()
+	{
+		img.colorAt(width, 0);
+	}, /are outside the bitmap/, 'colorAt (screen.width, 0) threw an error.');
 
-		// Support for higher density screens.
-		var multi = img.width / width;
-		width = width * multi;
-		height = height * multi;
-		expect(() => img.colorAt(0, height)).toThrowError(/are outside the bitmap/);
-		expect(() => img.colorAt(0, height-1)).not.toThrow();
-		expect(() => img.colorAt(width, 0)).toThrowError(/are outside the bitmap/);
-		expect(() => img.colorAt(9999999999999, 0)).toThrowError(/are outside the bitmap/);
-		expect(() => img.colorAt(0, 9999999999999)).toThrowError(/are outside the bitmap/);
-	});
+	t.doesNotThrow(function()
+	{
+		img.colorAt(width-1, 0);
+	}, /are outside the bitmap/, 'colorAt (screen.width-1, 0) did not throw an error.');
+
+	t.throws(function()
+	{
+		img.colorAt(9999999999999, 0);
+	}, /are outside the bitmap/, 'colorAt (9999999999999, 0) threw an error.');
+
+	// Regression test for https://github.com/octalmage/robotjs/commit/c41f38217fd73f59e6ca63015b51565cd1e7cfb7
+	t.throws(function()
+	{
+		img.colorAt(0, 9999999999999);
+	}, /are outside the bitmap/, 'colorAt (0, 9999999999999) threw an error.');
 });
