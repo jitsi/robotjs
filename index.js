@@ -23,11 +23,12 @@ function bitmap(width, height, byteWidth, bitsPerPixel, bytesPerPixel, image)
     {
         const buffer = this.image;
         const startIndex = (y * this.width + x) * this.bytesPerPixel;
-
-        if (typeof buffer[startIndex + 2] === 'undefined') {
-          throw new Error(`point out of range: (${x}, ${y})`);
+        if (typeof x !== 'number' || typeof y !== 'number') {
+            throw new Error(`Invalid number`);
         }
-
+        if (x < 0 || x >= this.width || y < 0 || y >= this.height || typeof buffer[startIndex + 2] === 'undefined') {
+            throw new Error(`(${x}, ${y}) are outside the bitmap`);
+        }
         let ret = '';
         ret += toHex(buffer[startIndex + 2]);
         ret += toHex(buffer[startIndex + 1]);
