@@ -4,6 +4,11 @@ module.exports = robotjs;
 
 module.exports.screen = {};
 
+function toHex(n)
+{
+    return n.toString(16).padStart(2, '0');
+}
+
 function bitmap(width, height, byteWidth, bitsPerPixel, bytesPerPixel, image)
 {
     this.width = width;
@@ -13,30 +18,21 @@ function bitmap(width, height, byteWidth, bitsPerPixel, bytesPerPixel, image)
     this.bytesPerPixel = bytesPerPixel;
     this.image = image;
 
-    function toHex(n)
-    {
-        return n.toString(16).padStart(2, '0');
-    }
-
-
     this.colorAt = function(x, y)
     {
-        const buffer = this.image;
-        const startIndex = (y * this.width + x) * this.bytesPerPixel;
         if (typeof x !== 'number' || typeof y !== 'number') {
             throw new Error(`Invalid number`);
         }
+
+        const buffer = this.image;
+        const startIndex = (y * this.width + x) * this.bytesPerPixel;
+
         if (x < 0 || x >= this.width || y < 0 || y >= this.height || typeof buffer[startIndex + 2] === 'undefined') {
             throw new Error(`(${x}, ${y}) are outside the bitmap`);
         }
-        let ret = '';
-        ret += toHex(buffer[startIndex + 2]);
-        ret += toHex(buffer[startIndex + 1]);
-        ret += toHex(buffer[startIndex]);
 
-        return ret;
+        return `${toHex(buffer[startIndex + 2])}${toHex(buffer[startIndex + 1])}${toHex(buffer[startIndex])}`;
     };
-
 }
 
 module.exports.screen.capture = function(x, y, width, height)
