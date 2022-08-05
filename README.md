@@ -172,10 +172,9 @@ I like AutoHotkey, but I like Node.js more. By developing RobotJS I get an AutoH
 
 ## Publishing
 
-1. Increment the version: `npm version patch`
-2. Push to github: `git push --follow-tags`
-3. Create and publish Github release: `gh release create v1.2.3`, replacing v1.2.3 with the actual release number
-4. Github action will prebuildify and publish release to npm
+On every push to main branch, the .github/workflows/ci.yml will create a new version and publish to npm.
+
+If a major or minor release is required, use respective key words in the commit message, see https://github.com/phips28/gh-action-bump-version#workflow
 
 ## License
 
