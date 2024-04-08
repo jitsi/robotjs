@@ -97,9 +97,9 @@ void win32KeyEvent(int key, MMKeyFlags flags)
 	}
 
 	/* Set the scan code for keyup */
-	if ( flags & KEYEVENTF_KEYUP ) {
+	/*if ( flags & KEYEVENTF_KEYUP ) {
 		scan |= 0x80;
-	}
+	}*/
 
 	flags |= KEYEVENTF_SCANCODE;
 
