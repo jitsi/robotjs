@@ -24,9 +24,6 @@ jobs:
           - os: ubuntu-20.04
             arch: x64
             build-group: linux-arm64
-          - os: macos-11
-            arch: x64
-            build-group: darwin-universal
           - os: windows-2019
             arch: x86
             build-group: win32-x86
