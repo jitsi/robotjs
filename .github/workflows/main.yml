@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build ${{ matrix.build-group }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-20.04
+            arch: x64
+            build-group: linux-x64
+          - os: ubuntu-20.04
+            arch: x64
+            build-group: linux-arm64
+          - os: macos-11
+            arch: x64
+            build-group: darwin-universal
+          - os: windows-2019
+            arch: x86
+            build-group: win32-x86
+          - os: windows-2019
+            arch: x64
+            build-group: win32-x64
+    env:
+      BUILD_GROUP: ${{ matrix.build-group }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        architecture: ${{ matrix.arch }}
+    - name: Prebuildify for linux-arm64
+      if: ${{ matrix.build-group == 'linux-arm64' }}
+      uses: pguyot/arm-runner-action@v2
+      with:
+        base_image: raspios_lite_arm64:latest
+        image_additional_mb: 5000
+        copy_artifact_path: prebuilds
+        commands: |
+            curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+            apt-get -y install nodejs libxtst-dev libpng++-dev
+            npm ci
+            npm run prebuild-$BUILD_GROUP
+    - name: Install linux x64 dependencies
+      if: ${{ matrix.build-group == 'linux-x64' }}
+      run: sudo apt-get install libxtst-dev libpng++-dev
+    - run: npm ci
+      if: ${{ matrix.build-group != 'linux-arm64' }}
+    - name: Prebuildify
+      if: ${{ matrix.build-group != 'linux-arm64' }}
+      run: npm run prebuild-$BUILD_GROUP
+      shell: bash
+    - uses: actions/upload-artifact@v3
+      with:
+        name: prebuilds
+        path: prebuilds/
+        if-no-files-found: error
+  publish:
+    name: Publish to npm
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-20.04
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
+      with:
+        name: prebuilds
+        path: prebuilds
+    - uses: phips28/gh-action-bump-version@95099cd5edcdae43499bc94202b9d907e739e9c8
+      with:
+        tag-prefix: 'v'
+        version-type: 'patch'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
