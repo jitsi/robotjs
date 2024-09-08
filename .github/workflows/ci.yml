@@ -33,6 +33,9 @@ jobs:
           - os: windows-2019
             arch: x64
             build-group: win32-x64
+          - os: windows-2019
+            arch: arm64
+            build-group: win32-arm64
     env:
       BUILD_GROUP: ${{ matrix.build-group }}
     steps:
