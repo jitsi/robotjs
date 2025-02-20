@@ -1,4 +1,7 @@
 {
+  'variables': {
+    'openssl_fips': ''
+  },
   'targets': [{
     'target_name': 'robotjs',
       'cflags!': [ '-fno-exceptions' ],
