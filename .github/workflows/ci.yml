@@ -22,7 +22,7 @@ jobs:
             arch: x64
             build-group: linux-x64
           - os: ubuntu-22.04-arm
-            arch: x64
+            arch: arm64
             build-group: linux-arm64
           - os: macos-13
             arch: x64
