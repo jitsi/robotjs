@@ -10,12 +10,13 @@
     "test-keyboard": "node test/keyboard.js",
     "test:win32": "jasmine test/**/*.js",
     "install": "node-gyp-build",
-    "prebuild": "prebuildify -t 16.0.0 --napi --strip",
-    "prebuild-darwin-universal": "prebuildify -t 16.0.0 --napi --strip --arch x64+arm64",
-    "prebuild-linux-x64": "prebuildify -t 16.0.0 --napi --strip",
-    "prebuild-linux-arm64": "prebuildify -t 16.0.0 --napi --strip",
-    "prebuild-win32-x86": "prebuildify -t 16.0.0 --napi --strip",
-    "prebuild-win32-x64": "prebuildify -t 16.0.0 --napi --strip"
+    "prebuild": "prebuildify -t 20.0.0 --napi --strip",
+    "prebuild-darwin-universal": "prebuildify -t 20.0.0 --napi --strip --arch x64+arm64",
+    "prebuild-linux-x64": "prebuildify -t 20.0.0 --napi --strip",
+    "prebuild-linux-arm64": "prebuildify -t 20.0.0 --napi --strip",
+    "prebuild-win32-x86": "prebuildify -t 20.0.0 --napi --strip",
+    "prebuild-win32-x64": "prebuildify -t 20.0.0 --napi --strip",
+    "prebuild-win32-arm64": "prebuildify -t 20.0.0 --napi --strip"
   },
   "repository": {
     "type": "git",
