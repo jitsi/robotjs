@@ -31,10 +31,10 @@ jobs:
           - os: macos-13
             arch: x64
             build-group: darwin-universal
-          - os: windows-2019
+          - os: windows-latest
             arch: x86
             build-group: win32-x86
-          - os: windows-2019
+          - os: windows-latest
             arch: x64
             build-group: win32-x64
           - os: windows-11-arm
