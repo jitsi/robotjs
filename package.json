@@ -1,6 +1,6 @@
 {
   "name": "@jitsi/robotjs",
-  "version": "0.6.16",
+  "version": "0.6.17",
   "description": "Node.js Desktop Automation.",
   "main": "index.js",
   "typings": "index.d.ts",
