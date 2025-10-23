@@ -1,5 +1,5 @@
 {
-  "name": "@jitsi/robotjs",
+  "name": "@evgenonyskiv/robotjs",
   "version": "0.6.18",
   "description": "Node.js Desktop Automation.",
   "main": "index.js",
@@ -11,16 +11,16 @@
     "test:win32": "jasmine test/**/*.js",
     "install": "node-gyp-build",
     "prebuild": "prebuildify -t 20.0.0 --napi --strip",
-    "prebuild-darwin-universal": "prebuildify -t 20.0.0 --napi --strip --arch x64+arm64",
-    "prebuild-linux-x64": "prebuildify -t 20.0.0 --napi --strip",
-    "prebuild-linux-arm64": "prebuildify -t 20.0.0 --napi --strip",
-    "prebuild-win32-x86": "prebuildify -t 20.0.0 --napi --strip",
-    "prebuild-win32-x64": "prebuildify -t 20.0.0 --napi --strip",
-    "prebuild-win32-arm64": "prebuildify -t 20.0.0 --napi --strip"
+    "prebuild-darwin-universal": "prebuildify -t 22.0.0 --napi --strip --arch x64+arm64",
+    "prebuild-linux-x64": "prebuildify -t 22.0.0 --napi --strip",
+    "prebuild-linux-arm64": "prebuildify -t 22.0.0 --napi --strip",
+    "prebuild-win32-x86": "prebuildify -t 22.0.0 --napi --strip",
+    "prebuild-win32-x64": "prebuildify -t 22.0.0 --napi --strip",
+    "prebuild-win32-arm64": "prebuildify -t 22.0.0 --napi --strip"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jitsi/robotjs.git"
+    "url": "https://github.com/evgenonyskiv/robotjs.git"
   },
   "keywords": [
     "Automation",
@@ -48,9 +48,9 @@
     ]
   },
   "bugs": {
-    "url": "https://github.com/jitsi/robotjs/issues"
+    "url": "https://github.com/evgenonyskiv/robotjs/issues"
   },
-  "homepage": "https://github.com/jitsi/robotjs",
+  "homepage": "https://github.com/evgenonyskiv/robotjs",
   "dependencies": {
     "node-addon-api": "^8.3.0",
     "node-gyp-build": "^4.8.4"
