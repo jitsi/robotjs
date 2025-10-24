@@ -45,7 +45,10 @@
   "binary": {
     "napi_versions": [
       3
-    ]
+    ],
+    "module_name": "robotjs",
+    "module_path": "prebuilds/{platform}-{arch}/",
+    "package_name": "{module_name}.node"
   },
   "bugs": {
     "url": "https://github.com/evgenonyskiv/robotjs/issues"
