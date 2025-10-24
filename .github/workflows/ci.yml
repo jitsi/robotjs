@@ -59,7 +59,7 @@ jobs:
       if: ${{ (matrix.build-group == 'linux-x64') || (matrix.build-group == 'linux-arm64') }}
       run: |
         for f in prebuilds/*/@evgenonyskiv+robotjs.node; do
-          mv "$f" "${f//@evgenonyskiv+robotjs.node/@evgenonyskiv-robotjs.node}"
+          mv "$f" "$(dirname "$f")/napi-v3.node"
         done
     - uses: actions/upload-artifact@v4
       with:
