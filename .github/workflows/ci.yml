@@ -55,6 +55,12 @@ jobs:
     - name: Prebuildify
       run: npm run prebuild-$BUILD_GROUP
       shell: bash
+    - name: Fix prebuild file names
+      if: ${{ (matrix.build-group == 'linux-x64') || (matrix.build-group == 'linux-arm64') }}
+      run: |
+        for f in prebuilds/*/@evgenonyskiv+robotjs.node; do
+          mv "$f" "${f//@evgenonyskiv+robotjs.node/@evgenonyskiv-robotjs.node}"
+        done
     - uses: actions/upload-artifact@v4
       with:
         name: prebuilds-${{ matrix.build-group }}
