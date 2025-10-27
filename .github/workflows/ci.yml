@@ -15,19 +15,36 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  build-linux-debian:
+    name: Build Linux (Debian)
+    runs-on: ubuntu-latest
+    container:
+      image: debian:12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install system dependencies
+        run: |
+          apt-get update
+          apt-get install -y build-essential python3 libxtst-dev libpng-dev
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - name: Prebuildify (Debian)
+        run: npx prebuildify --napi --napi-versions=3,4,5,6,7,8,9 --strip --tag-libc
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prebuilds-linux-debian
+          path: prebuilds/
+          if-no-files-found: error
+
+  build-other-platforms:
     name: Build ${{ matrix.build-group }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-22.04
-            arch: x64
-            build-group: linux-x64
-          - os: ubuntu-22.04-arm
-            arch: arm64
-            build-group: linux-arm64
           - os: macos-13
             arch: x64
             build-group: darwin-universal
@@ -37,58 +54,45 @@ jobs:
           - os: windows-latest
             arch: x64
             build-group: win32-x64
-          - os: windows-11-arm
-            arch: arm64
-            build-group: win32-arm64
     env:
       BUILD_GROUP: ${{ matrix.build-group }}
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-        architecture: ${{ matrix.arch }}
-    - name: Install linux dependencies
-      if: ${{ (matrix.build-group == 'linux-x64') || (matrix.build-group == 'linux-arm64') }}
-      run: sudo apt-get install libxtst-dev libpng++-dev
-    - run: npm ci
-    - name: Prebuildify
-      run: npm run prebuild-$BUILD_GROUP
-      shell: bash
-    - name: Fix prebuild file names
-      if: ${{ (matrix.build-group == 'linux-x64') || (matrix.build-group == 'linux-arm64') }}
-      run: |
-        for f in prebuilds/*/@evgenonyskiv+robotjs.node; do
-          mv "$f" "$(dirname "$f")/napi-v3.node"
-        done
-    - uses: actions/upload-artifact@v4
-      with:
-        name: prebuilds-${{ matrix.build-group }}
-        path: prebuilds/
-        if-no-files-found: error
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          architecture: ${{ matrix.arch }}
+      - run: npm ci
+      - name: Prebuildify
+        run: npx prebuildify --napi --napi-versions=3,4,5,6,7,8,9 --strip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prebuilds-${{ matrix.build-group }}
+          path: prebuilds/
+          if-no-files-found: error
+
   publish:
     name: Publish to npm
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build-linux-debian, build-other-platforms]
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/download-artifact@v4
-      with:
-        pattern: prebuilds-*
-        path: prebuilds
-        merge-multiple: true
-    - uses: phips28/gh-action-bump-version@95099cd5edcdae43499bc94202b9d907e739e9c8
-      with:
-        tag-prefix: 'v'
-        version-type: 'patch'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '22'
-        registry-url: 'https://registry.npmjs.org'
-    - run: npm publish --provenance --access public
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: prebuilds-*
+          path: prebuilds
+          merge-multiple: true
+      - uses: phips28/gh-action-bump-version@95099cd5edcdae43499bc94202b9d907e739e9c8
+        with:
+          tag-prefix: 'v'
+          version-type: 'patch'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
