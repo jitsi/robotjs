@@ -66,7 +66,7 @@ jobs:
       - name: Prebuildify
         run: |
           if [[ "$BUILD_GROUP" == "darwin-arm64" ]]; then
-            npx prebuildify --napi --napi-versions=3,4,5,6,7,8,9 --strip --arch arm64
+            npx prebuildify --napi --napi-versions=3,4,5,6,7,8,9 --strip --arch x64+arm64
           else
             npx prebuildify --napi --napi-versions=3,4,5,6,7,8,9 --strip
           fi
