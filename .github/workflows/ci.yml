@@ -64,7 +64,13 @@ jobs:
           architecture: ${{ matrix.arch }}
       - run: npm ci
       - name: Prebuildify
-        run: npx prebuildify --napi --napi-versions=3,4,5,6,7,8,9 --strip
+        run: |
+          if [[ "$BUILD_GROUP" == "darwin-arm64" ]]; then
+            npx prebuildify --napi --napi-versions=3,4,5,6,7,8,9 --strip --arch arm64
+          else
+            npx prebuildify --napi --napi-versions=3,4,5,6,7,8,9 --strip
+          fi
+        shell: bash
       - uses: actions/upload-artifact@v4
         with:
           name: prebuilds-${{ matrix.build-group }}
