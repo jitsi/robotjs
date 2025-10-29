@@ -17,7 +17,6 @@
     "prebuild-win32-x64": "prebuildify -t 22.0.0 --napi --strip",
     "prebuild-win32-arm64": "prebuildify -t 22.0.0 --napi --strip"
   },
-  "install": "node-gyp-build",
   "files": [
     "prebuilds/",
     "build/",
