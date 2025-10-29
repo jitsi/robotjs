@@ -1,6 +1,6 @@
 {
   "name": "@evgenonyskiv/robotjs",
-  "version": "0.6.27",
+  "version": "0.6.28",
   "description": "Node.js Desktop Automation.",
   "main": "index.js",
   "typings": "index.d.ts",
@@ -9,7 +9,6 @@
     "test:darwin:linux": "jasmine test/**/*.js",
     "test-keyboard": "node test/keyboard.js",
     "test:win32": "jasmine test/**/*.js",
-    "install": "node-gyp-build",
     "prebuild": "prebuildify -t 20.0.0 --napi --strip",
     "prebuild-darwin-universal": "prebuildify -t 22.0.0 --napi --strip --arch x64+arm64",
     "prebuild-linux-x64": "npx prebuildify --napi --strip",
