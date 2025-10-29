@@ -18,6 +18,12 @@
     "prebuild-win32-x64": "prebuildify -t 22.0.0 --napi --strip",
     "prebuild-win32-arm64": "prebuildify -t 22.0.0 --napi --strip"
   },
+  "files": [
+    "prebuilds/",
+    "build/",
+    "src/",
+    "index.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/evgenonyskiv/robotjs.git"
