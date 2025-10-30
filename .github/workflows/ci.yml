@@ -31,24 +31,16 @@ jobs:
           node-version: '22'
       - run: npm ci
       - name: Prebuildify (Debian)
-        run: npx prebuildify --napi --napi-versions=3,4,5,6,7,8,9 --strip --tag-libc
+        run: npx prebuildify --napi --napi-versions=3,4,5,6,7,8,9 --strip
       - name: List prebuilds
         run: ls -R prebuilds || echo "No prebuilds found"
       - name: Rename Linux binaries
         shell: bash
         run: |
           shopt -s nullglob
-          for f in prebuilds/linux-*/@evgenonyskiv+robotjs.glibc.node; do
+          for f in prebuilds/linux-*/@evgenonyskiv+robotjs.node; do
             mv "$f" "$(dirname "$f")/napi-v9.node"
           done
-      - name: Fix Linux prebuilds path
-        run: |
-          if [ -d prebuilds/linux-x64 ]; then
-            mkdir -p prebuilds/linux-x64-glibc
-            mv prebuilds/linux-x64/* prebuilds/linux-x64-glibc/
-            rmdir prebuilds/linux-x64
-          fi
-          ls -R prebuilds
       - uses: actions/upload-artifact@v4
         with:
           name: prebuilds-linux-debian
