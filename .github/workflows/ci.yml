@@ -24,8 +24,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install system dependencies
         run: |
-          apt-get update
-          apt-get install -y build-essential python3 libxtst-dev libpng-dev libx11-dev
+          apt-get update && apt-get install -y build-essential python3 libxtst-dev libx11-dev libpng-dev zlib1g-dev
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -39,7 +38,7 @@ jobs:
         run: |
           shopt -s nullglob
           for f in prebuilds/linux-*/@evgenonyskiv+robotjs.node; do
-            mv "$f" "$(dirname "$f")/napi-v9.node"
+            mv "$f" "$(dirname "$f")/@evgenonyskiv-robotjs.node"
           done
       - uses: actions/upload-artifact@v4
         with:
