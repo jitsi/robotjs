@@ -15,37 +15,6 @@ permissions:
   id-token: write
 
 jobs:
-  build-linux-debian:
-    name: Build Linux (Debian)
-    runs-on: ubuntu-latest
-    container:
-      image: debian:12
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install system dependencies
-        run: |
-          apt-get update && apt-get install -y build-essential python3 libxtst-dev libx11-dev libpng-dev zlib1g-dev
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - run: npm ci
-      - name: Prebuildify (Debian)
-        run: npx prebuildify --napi --napi-versions=3,4,5,6,7,8,9 --strip
-      - name: List prebuilds
-        run: ls -R prebuilds || echo "No prebuilds found"
-      - name: Rename Linux binaries
-        shell: bash
-        run: |
-          shopt -s nullglob
-          for f in prebuilds/linux-*/@evgenonyskiv+robotjs.node; do
-            mv "$f" "$(dirname "$f")/@evgenonyskiv-robotjs.node"
-          done
-      - uses: actions/upload-artifact@v4
-        with:
-          name: prebuilds-linux-debian
-          path: prebuilds/
-          if-no-files-found: error
-
   build-other-platforms:
     name: Build ${{ matrix.build-group }}
     runs-on: ${{ matrix.os }}
@@ -53,6 +22,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - os: ubuntu-22.04
+            arch: x64
+            build-group: linux-x64
+          - os: ubuntu-22.04-arm
+            arch: arm64
+            build-group: linux-arm64
           - os: macos-13
             arch: x64
             build-group: darwin-universal
@@ -70,6 +45,9 @@ jobs:
         with:
           node-version: '22'
           architecture: ${{ matrix.arch }}
+      - name: Install linux dependencies
+        if: ${{ (matrix.build-group == 'linux-x64') || (matrix.build-group == 'linux-arm64') }}
+        run: sudo apt-get install libxtst-dev libpng++-dev
       - run: npm ci
       - name: Prebuildify
         run: |
@@ -89,7 +67,7 @@ jobs:
     name: Publish to npm
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
-    needs: [build-linux-debian, build-other-platforms]
+    needs: [build-other-platforms]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
