@@ -48,6 +48,7 @@ jobs:
       - name: Install linux dependencies
         if: ${{ (matrix.build-group == 'linux-x64') || (matrix.build-group == 'linux-arm64') }}
         run: sudo apt-get install libxtst-dev libpng++-dev
+      - run: node -p "process.versions.modules"
       - run: npm ci
       - name: Prebuildify
         run: |
