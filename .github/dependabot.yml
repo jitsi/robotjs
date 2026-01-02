@@ -4,3 +4,8 @@ updates:
     directory: "/"
     schedule:
       interval: "semiannually"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    
