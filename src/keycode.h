@@ -206,6 +206,33 @@ typedef KeySym MMKeyCode;
 
 #elif defined(IS_WINDOWS)
 
+#define VK_A 0x41
+#define VK_B 0x42
+#define VK_C 0x43
+#define VK_D 0x44
+#define VK_E 0x45
+#define VK_F 0x46
+#define VK_G 0x47
+#define VK_H 0x48
+#define VK_I 0x49
+#define VK_J 0x4A
+#define VK_K 0x4B
+#define VK_L 0x4C
+#define VK_M 0x4D
+#define VK_N 0x4E
+#define VK_O 0x4F
+#define VK_P 0x50
+#define VK_Q 0x51
+#define VK_R 0x52
+#define VK_S 0x53
+#define VK_T 0x54
+#define VK_U 0x55
+#define VK_V 0x56
+#define VK_W 0x57
+#define VK_X 0x58
+#define VK_Y 0x59
+#define VK_Z 0x5A
+
 enum _MMKeyCode {
 	K_NOT_A_KEY = 9999,
 	K_BACKSPACE = VK_BACK,
@@ -293,7 +320,34 @@ enum _MMKeyCode {
 	K_LIGHTS_MON_DOWN = K_NOT_A_KEY,
 	K_LIGHTS_KBD_TOGGLE = K_NOT_A_KEY,
 	K_LIGHTS_KBD_UP = K_NOT_A_KEY,
-	K_LIGHTS_KBD_DOWN = K_NOT_A_KEY
+	K_LIGHTS_KBD_DOWN = K_NOT_A_KEY,
+
+	K_A = VK_A,
+	K_B = VK_B,
+	K_C = VK_C,
+	K_D = VK_D,
+	K_E = VK_E,
+	K_F = VK_F,
+	K_G = VK_G,
+	K_H = VK_H,
+	K_I = VK_I,
+	K_J = VK_J,
+	K_K = VK_K,
+	K_L = VK_L,
+	K_M = VK_M,
+	K_N = VK_N,
+	K_O = VK_O,
+	K_P = VK_P,
+	K_Q = VK_Q,
+	K_R = VK_R,
+	K_S = VK_S,
+	K_T = VK_T,
+	K_U = VK_U,
+	K_V = VK_V,
+	K_W = VK_W,
+	K_X = VK_X,
+	K_Y = VK_Y,
+	K_Z = VK_Z
 };
 
 typedef int MMKeyCode;

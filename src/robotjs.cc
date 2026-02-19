@@ -316,6 +316,32 @@ struct KeyNames
 
 static KeyNames key_names[] =
 {
+	{"a", 				K_A},
+	{"b",               K_B},
+	{"c",               K_C},
+	{"d",               K_D},
+	{"e",               K_E},
+	{"f",               K_F},
+	{"g",               K_G},
+	{"h",               K_H},
+	{"i",               K_I},
+	{"j",               K_J},
+	{"k",               K_K},
+	{"l",               K_L},
+	{"m",               K_M},
+	{"n",               K_N},
+	{"o",               K_O},
+	{"p",               K_P},
+	{"q",               K_Q},
+	{"r",               K_R},
+	{"s",               K_S},
+	{"t",               K_T},
+	{"u",               K_U},
+	{"v",               K_V},
+	{"w",               K_W},
+	{"x",               K_X},
+	{"y",               K_Y},
+	{"z",               K_Z},
 	{ "backspace",      K_BACKSPACE },
 	{ "delete",         K_DELETE },
 	{ "enter",          K_RETURN },
@@ -410,12 +436,6 @@ static KeyNames key_names[] =
 int CheckKeyCodes(const char* k, MMKeyCode *key)
 {
 	if (!key) return -1;
-
-	if (strlen(k) == 1)
-	{
-		*key = keyCodeForChar(*k);
-		return 0;
-	}
 
 	*key = K_NOT_A_KEY;
 
